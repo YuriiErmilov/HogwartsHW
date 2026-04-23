@@ -3,6 +3,8 @@ package ru.hogwarts.school.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
@@ -17,6 +19,13 @@ public class StudentService {
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
+    }
+
+    public List<Student> findStudentsByAgeBetween(int min, int max) {
+        if(min > max) {
+            throw new IllegalArgumentException("min > max");
+        }
+        return studentRepository.findByAgeBetween(min,max);
     }
 
     public List<Student> getAllStudents() {

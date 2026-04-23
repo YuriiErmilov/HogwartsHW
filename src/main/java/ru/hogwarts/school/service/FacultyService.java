@@ -16,6 +16,13 @@ public class FacultyService {
         this.facultyRepository = facultyRepository;
     }
 
+    public List<Faculty> findByNameOrColor (String query){
+        if(query == null || query.isBlank()){
+            throw new EntityNotFoundException("Faculty name or color parameter is invalid");
+        }
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(query, query);
+    }
+
     public List<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
     }
@@ -25,7 +32,7 @@ public class FacultyService {
     }
 
     public Faculty findFaculty(Long id) {
-        return facultyRepository.findById(id).get();
+        return facultyRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Faculty not found"));
     }
 
     public Faculty editFaculty(Faculty faculty) {
