@@ -111,6 +111,7 @@ public class FacultyControllerWebMvcTest {
     @Test
     void testDeleteFaculty() throws Exception {
         mockMvc.perform(delete("/faculties/1"))
+
                 .andExpect(status().isOk());
     }
 }
