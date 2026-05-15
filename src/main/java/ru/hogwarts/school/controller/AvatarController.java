@@ -10,7 +10,7 @@ import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.service.AvatarService;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @RestController
