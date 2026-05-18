@@ -1,0 +1,14 @@
+ALERT TABLE student
+ADD CONSTRAINT chkStudentsAge CHECK (age >= 16)
+
+ALERT TABLE student
+ALERT COLUMN name SET NOT NULL
+
+ALERT TABLE student
+ADD CONSTRAINT uqStudentName UNIQUE (name)
+
+ALERT TABLE student
+ALERT COLUMN age SET DEFAULT 20;
+
+ALERT TABLE faculty
+ALERT CONSTRAINT uqFacultyNameColor UNIQUE (name,color);

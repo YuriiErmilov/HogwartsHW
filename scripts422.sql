@@ -1,0 +1,17 @@
+CREATE TABLE car (
+ id BIGSERIAL PRIMARY KEY,
+ brand VARCHAR(255),
+ model VARCHAR(255),
+ price DECIMAL,
+);
+
+CREATE TABLE person (
+ id BIGSERIAL PRIMARY KEY,
+ name VARCHAR(255),
+ age INT,
+ hasLicense BOOLEAN,
+ carId BIGINT,
+
+ CONSTRAINT fkPersonCar FOREIGN KEY (carId)
+ REFERENCES car(id)
+);
