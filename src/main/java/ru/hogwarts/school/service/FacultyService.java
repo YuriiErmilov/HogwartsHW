@@ -5,11 +5,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Service
 public class FacultyService {
+    private static final Logger logger = LoggerFactory.getLogger(FacultyService.class);
     private final FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
@@ -17,37 +20,50 @@ public class FacultyService {
     }
 
     public List<Faculty> findByNameOrColor (String query){
+        logger.info("findByNameOrColor");
         if(query == null || query.isBlank()){
+            logger.error("query is null or query is blank");
             throw new EntityNotFoundException("Faculty name or color parameter is invalid");
         }
         return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(query, query);
     }
 
     public List<Faculty> getAllFaculties() {
+        logger.info("getAllFaculties");
         return facultyRepository.findAll();
     }
 
     public Faculty createFaculty(Faculty faculty) {
+        logger.info("createFaculty");
        return facultyRepository.save(faculty);
     }
 
     public Faculty findFaculty(Long id) {
-        return facultyRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Faculty not found"));
+        logger.info("findFaculty");
+        return facultyRepository.findById(id).orElseThrow(()-> {
+            logger.error("faculty with id {} not found", id);
+            return new EntityNotFoundException("Faculty not found");
+        });
     }
 
     public Faculty editFaculty(Faculty faculty) {
+        logger.info("editFaculty");
         if (faculty.getId() == null || !facultyRepository.existsById(faculty.getId()))  {
+            logger.error("faculty with id {} not found", faculty.getId());
             throw new EntityNotFoundException("Faculty with id " + faculty.getId() + " not found");
         }
         return facultyRepository.save(faculty);
     }
 
     public void deleteFaculty(Long id) {
+        logger.info("deleteFaculty");
         facultyRepository.deleteById(id);
     }
 
     public List<Faculty> findFacultyByColor(String color) {
+        logger.info("findFacultyByColor");
         if (color == null || color.isBlank()) {
+            logger.error("color is empty");
             throw new IllegalArgumentException("color is required");
         }
         return facultyRepository.findByColorIgnoreCase(color);
