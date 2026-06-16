@@ -97,4 +97,21 @@ public class StudentService {
         logger.info("findLastFiveStudents");
         return studentRepository.findLastFiveStudents();
     }
+
+    public List<String> getStudentsNamesStartsWithA() {
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .map(String::toUpperCase)
+                .toList();
+    }
+
+    public double getStudentsAverageAge() {
+        return studentRepository.findAll()
+                .stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
+    }
 }

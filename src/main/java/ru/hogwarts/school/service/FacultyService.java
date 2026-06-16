@@ -8,7 +8,9 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.LongStream;
 
 @Service
 public class FacultyService {
@@ -67,5 +69,19 @@ public class FacultyService {
             throw new IllegalArgumentException("color is required");
         }
         return facultyRepository.findByColorIgnoreCase(color);
+    }
+
+    public String getLongestName() {
+        return facultyRepository.findAll()
+                .stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
+    }
+
+    public long calculateSum() {
+        return LongStream.rangeClosed(1, 1_000_000)
+                .parallel()
+                .sum();
     }
 }
