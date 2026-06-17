@@ -6,6 +6,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 @RestController
@@ -16,6 +17,10 @@ public class StudentController {
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
+    }
+
+    private synchronized void printName(Student student) {
+        System.out.println(student.getName());
     }
 
     @GetMapping("/{id}/faculty")
@@ -79,5 +84,51 @@ public class StudentController {
     @GetMapping("/average-age")
     public double getStudentsAverageAge() {
         return studentService.getStudentsAverageAge();
+    }
+
+    @GetMapping("/print-parallel")
+
+    public void printParallelStudents() {
+        List<Student> students = studentService.getAllStudents();
+        if(students.size() < 6) {
+            return;
+        }
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        Thread thread = new Thread(()->{
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        });
+        Thread thread1 = new Thread(()->{
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        });
+        thread.start();
+        thread1.start();
+
+    }
+
+    @GetMapping("/print-synchronized")
+
+    public void printSynchronizedStudents() {
+        List<Student> students = studentService.getAllStudents();
+        if(students.size() < 6) {
+            return;
+        }
+        printName(students.get(0));
+        printName(students.get(1));
+
+        Thread thread = new Thread(()->{
+            printName(students.get(2));
+            printName(students.get(3));
+        });
+
+        Thread thread1 = new Thread(()->{
+            printName(students.get(4));
+            printName(students.get(5));
+        });
+        thread.start();
+        thread1.start();
     }
 }
